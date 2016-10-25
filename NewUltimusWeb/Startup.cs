@@ -24,7 +24,7 @@ namespace NewUltimusWeb
             services.AddControllersAsServices(typeof(Startup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
                 .Where(t => typeof(IController).IsAssignableFrom(t) || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
-            services.AddScoped<IBpmAuthenticationManager, UltimusAuthenticationManager>();
+            services.AddTransient<IBpmAuthenticationManager, UltimusAuthenticationManager>();            
         }
 
         public void Configuration(IAppBuilder app)
