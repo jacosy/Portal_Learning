@@ -9,26 +9,25 @@ namespace NewUltimusWeb.Models
 {
     public interface IAccount
     {
+        string UserId { get; }
         string UserName { get; set; }
+        string Email { get; }
         string Domain { get; set; }
     }
 
     public class UltimusAccount : IAccount
     {
-        public string UserID
-        {
-            get { return $"{this.Domain}/{this.UserName}"; }
-        }
+        public string UserId { get { return $"{this.Domain}/{this.UserName}"; } }
+        public string Email { get { return $"{this.UserName}@{this.Domain}"; } }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Domain { get; set; }
         public string SessionId { get; set; }
-        public string TaskID { get; set; }
     }
 
     public class AccountLoginModel
     {
-        [Required]        
+        [Required]
         public string UserName { get; set; }
         [Required]
         [DataType(DataType.Password)]

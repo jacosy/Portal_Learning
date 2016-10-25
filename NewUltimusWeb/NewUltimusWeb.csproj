@@ -2735,6 +2735,7 @@
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\DependencyResolverService.cs" />
     <Compile Include="Services\ServiceProviderExtensions.cs" />
+    <Compile Include="Services\UltimusClientService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Web References\ClientServices\Reference.cs">
       <AutoGen>True</AutoGen>

@@ -5,44 +5,57 @@ using System.Web;
 using System.Security.Claims;
 using Microsoft.Owin;
 using NewUltimusWeb.Models;
+using System.Security.Principal;
+using System.Threading.Tasks;
 
 namespace NewUltimusWeb.Services
 {
-    public interface IBpmAuthenticationManager
+    public interface IBpmAuthenticationManager<IAccount>
     {
         void SignIn(IAccount account);
-        void SignOut(IAccount account);
+        void SignOut();
     }
 
-    public class UltimusAuthenticationManager : IBpmAuthenticationManager
-    {       
+    public class UltimusAuthenticationManager : IBpmAuthenticationManager<IAccount>
+    {
         private readonly IOwinContext _context;
-        public UltimusAuthenticationManager(IOwinContext context)
+        public UltimusAuthenticationManager()
         {
-            this._context = context;
+            this._context = HttpContext.Current.GetOwinContext();
         }
 
         public void SignIn(IAccount account)
         {
-            UltimusAccount ultAccount = account as UltimusAccount;
+            var ultAccount = (UltimusAccount)account;
             var identity = new ClaimsIdentity("BpmAppicationCookie");
-
-            _context.Response.Cookies.Append("SessionId", "aaaa");
-            _context.Response.Cookies.Append("Username", "LongoriaYou");
-            _context.Response.Cookies.Append("Password", "aaabbbccc");
-            //identity.AddClaims(new List<Claim>
-            //    {
-            //        new Claim("SessionId", SessionId),
-            //        new Claim(ClaimTypes.NameIdentifier, model.UserName),
-            //        new Claim(ClaimTypes.Name, model.UserName),
-            //        new Claim("Password", model.Password)
-            //    });
+            identity.AddClaims(new List<Claim>
+            {
+                new Claim("SessionID", ultAccount.SessionId),
+                new Claim("TaskID", ultAccount.SessionId),
+                new Claim(ClaimTypes.NameIdentifier, ultAccount.UserId),
+                new Claim("Domain", ultAccount.Domain),
+                new Claim(ClaimTypes.Name, ultAccount.UserName),
+                new Claim(ClaimTypes.Email, ultAccount.UserName),
+                new Claim(ClaimTypes.Sid, ultAccount.Password)
+            });
             _context.Authentication.SignIn(identity);
-        }
 
-        public void SignOut(IAccount account)
-        {
-            throw new NotImplementedException();
+            _context.Response.Cookies.Append("SessionID", ultAccount.SessionId);
+            _context.Response.Cookies.Append("UserID", ultAccount.UserId);
+            _context.Response.Cookies.Append("Domain", ultAccount.Domain);
+            _context.Response.Cookies.Append("Username", ultAccount.UserName);
         }
+        public void SignOut()
+        {           
+            // First we clean the authentication ticket like always
+            _context.Authentication.SignOut("BpmAppicationCookie");
+            // Second we clear the principal to ensure the user does not retain any authentication
+            _context.Authentication.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+            // Third Remove Cookies
+            foreach (var cookie in _context.Request.Cookies)
+            {                
+                _context.Response.Cookies.Delete(cookie.Key);
+            }
+        }        
     }
 }

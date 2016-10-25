@@ -13,7 +13,7 @@
         @{ Html.RenderPartial("_LoginText"); }
         <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
             <div class="well no-padding">
-                <form action="@Url.Action("login", "account")" method="POST" id="login-form" class="smart-form client-form">
+                <form action="@Url.Action("login", "Auth")" method="POST" id="login-form" class="smart-form client-form">
                     <header>
                         Sign In
                     </header>
@@ -22,30 +22,32 @@
                     @Html.ValidationBootstrap()
                     <fieldset>
                         <section>
-                            <label class="label">User Name</label>
+                            <label class="label" for="userName">User Name</label>
                             <label class="input">
                                 <i class="icon-append fa fa-user"></i>
-                                <input type="text" name="email" value="" placeholder="please enter user name">
+                                <input type="text" name="userName" value="@Model.UserName" placeholder="please enter user name">
                                 <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Please enter your user name</b>
                             </label>
                         </section>
 
                         <section>
-                            <label class="label">Password</label>
+                            <label class="label" for="password">Password</label>
                             <label class="input">
                                 <i class="icon-append fa fa-lock"></i>
-                                <input type="password" name="password" value="" placeholder="please enter your password">
+                                <input type="password" name="password" value="@Model.Password" placeholder="please enter your password">
                                 <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Enter your password</b>
                             </label>                            
                         </section>
 
-                        <section>
-                            <label class="label">Domain</label>
+                        <section class="form-group">
+                            <label class="label" for="domain">Domain</label>
                             <label class="input">
-                                <select class="form-control">
+                                @Html.DropDownListFor(m=>m.Domain, new List<SelectListItem> { new SelectListItem { Text = "tutorabc.com" }, new SelectListItem { Text = "vipabc.com" } }, "", new { name = "domain", @class="form-control" })
+                                @*<select name="domain" class="form-control">
+                                    <option></option>
                                     <option>tutorabc.com</option>
                                     <option>vipabc.com</option>
-                                </select>
+                                </select>*@
                             </label>
                         </section>
 
@@ -74,6 +76,9 @@
             $("#login-form").validate({
                 // Rules for form validation
                 rules: {
+                    userName: {
+                        required: true
+                    },
                     email: {
                         required: true,
                         email: true
@@ -82,17 +87,26 @@
                         required: true,
                         minlength: 3,
                         maxlength: 20
+                    },
+                    Domain: {
+                        required: true
                     }
                 },
 
                 // Messages for form validation
                 messages: {
+                    userName: {
+                        required: 'Please enter user name',                        
+                    },
                     email: {
                         required: 'Please enter your email address',
                         email: 'Please enter a VALID email address'
                     },
                     password: {
                         required: 'Please enter your password'
+                    },
+                    Domain: {
+                        required: 'Please choose your domain'
                     }
                 },
 

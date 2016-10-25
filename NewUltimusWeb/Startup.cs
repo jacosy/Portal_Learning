@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NewUltimusWeb.Services;
 using System.Web.Mvc;
 using System.Linq;
+using NewUltimusWeb.Models;
+using System.Web;
 
 [assembly: OwinStartup(typeof(NewUltimusWeb.Startup))]
 
@@ -24,7 +26,8 @@ namespace NewUltimusWeb
             services.AddControllersAsServices(typeof(Startup).Assembly.GetExportedTypes()
                 .Where(t => !t.IsAbstract && !t.IsGenericTypeDefinition)
                 .Where(t => typeof(IController).IsAssignableFrom(t) || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
-            services.AddTransient<IBpmAuthenticationManager, UltimusAuthenticationManager>();            
+            services.AddTransient<IBpmAuthenticationManager<IAccount>, UltimusAuthenticationManager>();
+            services.AddTransient<IOwinContext, OwinContext>();
         }
 
         public void Configuration(IAppBuilder app)
