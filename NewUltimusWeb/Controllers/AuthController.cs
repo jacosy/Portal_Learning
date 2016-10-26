@@ -51,7 +51,7 @@ namespace NewUltimusWeb.Controllers
             if (account != null)
             {
                 // Then create an identity for it and sign it in                
-                SignIn(account);
+                SignIn(account, model.RememberMe);
 
                 // If the user came from a specific page, redirect back to it
                 return RedirectToLocal(model.ReturnUrl);
@@ -64,13 +64,13 @@ namespace NewUltimusWeb.Controllers
             return View(model);
         }
 
-        private void SignIn(IAccount account)
+        private void SignIn(IAccount account, bool rememberMe)
         {
             // Clear any lingering authencation data
             _authManager.SignOut();
 
             // Create a claims based identity for the current user
-            _authManager.SignIn(account);
+            _authManager.SignIn(account, rememberMe);
         }
 
         private ActionResult RedirectToLocal(string returnUrl = "")
@@ -94,17 +94,14 @@ namespace NewUltimusWeb.Controllers
         public ActionResult Logout()
         {
             string errorMsg;
-            string sessionId = GetClaimValueByType("SessionID");
+            string sessionId = GetClaimValueByType("SessionID");            
             if (!string.IsNullOrEmpty(sessionId))
             {
                 UltimusClientService ultService = new UltimusClientService();
                 ultService.LogoutUser(sessionId, out errorMsg);
             }
-
             _authManager.SignOut();            
 
-            // we redirect to a controller/action that requires authentication to ensure a redirect takes place
-            // this clears the Request.IsAuthenticated flag since this triggers a new request
             return RedirectToLocal();
         }
 
