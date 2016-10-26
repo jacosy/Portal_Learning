@@ -14,6 +14,6 @@ namespace NewUltimusWeb.Controllers
         {
             
             return View();
-        }
+        }        
     }
 }

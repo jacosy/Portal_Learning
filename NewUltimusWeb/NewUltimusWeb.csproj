@@ -2685,6 +2685,7 @@
     <Content Include="Scripts\smart-chat-ui\smart.chat.ui.min.js" />
     <Content Include="Scripts\smartwidgets\jarvis.widget.min.js" />
     <Content Include="Scripts\speech\voicecommand.min.js" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web References\ClientServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -2827,7 +2828,7 @@
     <Content Include="Views\Shared\_Tiles.cshtml" />
     <Content Include="Views\Shared\_TopRight.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\SAIndex.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\angular.min.js.map" />
@@ -3002,6 +3003,7 @@
     <Folder Include="Content\img\realestate\thumbs\" />
     <Folder Include="Content\sound\" />
     <Folder Include="Content\xml\" />
+    <Folder Include="Scripts\bpm\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
